@@ -1,5 +1,5 @@
 CC = gcc
-CXXFLAGS = -Wall -O3
+CXXFLAGS = -Wall -O3 
 CFLAGS = $(CXXFLAGS) -c
 LFLAGS = $(CXXFLAGS)
 
@@ -8,8 +8,11 @@ OBJECTS = hash_table.o tinyvm.o memory.o program.o stack.o virtual_machine.o
 DEBUG = no
 PROFILE = no
 
+BIN_NAME = fastvm
+
 ifeq ($(DEBUG), yes)
 	CXXFLAGS += -g
+	BIN_NAME := $(BIN_NAME)-debug
 endif
 
 ifeq ($(PROFILE), yes)
@@ -19,13 +22,13 @@ endif
 all: tinyvm
 
 tinyvm: $(OBJECTS)
-	$(CC) $(LFLAGS) $(OBJECTS) -o tinyvm
+	$(CC) $(LFLAGS) $(OBJECTS) -o $(BIN_NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f tinyvm tinyvm-debug gmon.out *.save *.o
+	rm -f $(BIN_NAME) $(BIN_NAME)-debug gmon.out *.save *.o
 
 rebuild: clean tinyvm
 
