@@ -1,3 +1,6 @@
+FastVM is a branch of TinyVM, the main goal of which is performance, 
+rather than a small size, or simplicity. 
+
 Building can be accomplished on UNIX-like systems with make and GCC.
 
 There are no external dependencies, save the C standard library.
