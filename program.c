@@ -27,12 +27,15 @@ program* create_program(char* filename, memory* pMemory)
 	char line[128];
 	memset(line, 0, 128);
 
+	p->args = malloc(sizeof(int**) * MAX_ARGS);
+
 	// Get one line from the source file
 	while(fgets(line, 128, pFile))
 	{
+		int i;
+
 		p->instr = realloc(p->instr, sizeof(int) * (p->num_instructions + 1));
-		p->args = realloc(p->args, sizeof(int**) * (p->num_instructions + 1));
-		p->args[p->num_instructions] = malloc(sizeof(int*) * MAX_ARGS);
+		for(i = 0; i < MAX_ARGS; i++) p->args[i] = realloc(p->args[i], sizeof(int*) * (p->num_instructions + 1));
 
 		line[strlen(line) - 1] = '\0';
 
@@ -153,7 +156,7 @@ program* create_program(char* filename, memory* pMemory)
 						char* end_symbol = strchr(tokens[i], ']');
 						if(end_symbol) *end_symbol = 0;
 
-						p->args[num_instr][i - token_idx] = &pMemory->int32[parse_value(tokens[i] + 1)];
+						p->args[i - token_idx][num_instr] = &pMemory->int32[parse_value(tokens[i] + 1)];
 						continue;
 					}
 					// If it's not an address, check if the argument is a label
@@ -165,14 +168,14 @@ program* create_program(char* filename, memory* pMemory)
 						// If the label was found, create the argument
 						if(instr_idx >= 0)
 						{
-							p->args[num_instr][i - token_idx] = add_value(p, instr_idx);
+							p->args[i - token_idx][num_instr] = add_value(p, instr_idx);
 							continue;
 						}
 					}
 
 					// If it's not an address, and it's not a label, parse it as a value
 					int value = parse_value(tokens[i]);
-					p->args[num_instr][i - token_idx] = add_value(p, value);
+					p->args[i - token_idx][num_instr] = add_value(p, value);
 				}
 			}
 		}
@@ -195,7 +198,7 @@ void destroy_program(program* p)
 	for(i = 0; i < p->num_values; i++) free(p->values[i]);
 	if(p->values) free(p->values);
 
-	for(i = 0; i < p->num_instructions; i++) free(p->args[i]);
+	for(i = 0; i < MAX_ARGS; i++) free(p->args[i]);
 	if(p->args) free(p->args);
 
 	if(p->instr) free(p->instr);

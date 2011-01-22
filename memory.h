@@ -5,12 +5,6 @@
 
 typedef struct
 {
-	// FLAGS
-	int equal;
-	int greater;
-
-	int remainder;
-
 	// System memory
 	int* int32;
 
