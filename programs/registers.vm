@@ -1,0 +1,6 @@
+	mov ax, 0
+	mov bx, 10
+loop:	inc ax
+	cmp ax, bx
+	jl loop
+	mov [0], ax

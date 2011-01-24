@@ -57,7 +57,7 @@ void run_vm(virtual_machine* vm)
 			--(**arg0);
 			break;
 		case ADD:
-			**arg0 += **arg1;
+			**arg0 = **arg0 + **arg1;
 			break;
 		case SUB:
 			**arg0 -= **arg1;

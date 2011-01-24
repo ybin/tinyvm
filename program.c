@@ -150,6 +150,15 @@ program* create_program(char* filename, memory* pMemory)
 					char* newline = strchr(tokens[i], '\n');
 					if(newline) *newline = 0;
 
+					// Attempt to parse the argument as a register
+					int* reg = parse_register(tokens[i], pMemory);
+
+					if(reg)
+					{
+						p->args[i - token_idx][num_instr] = reg;
+						continue;
+					}
+
 					// Check to see whether the token specifies an address
 					if(tokens[i][0] == '[')
 					{
@@ -203,6 +212,75 @@ void destroy_program(program* p)
 
 	if(p->instr) free(p->instr);
 	if(p) free(p);
+}
+
+/* Take a string that may or may not reference a register, parse it,
+and return an address to the appropriate "register" if the string refers
+to a valid "register." If not, return NULL. */
+int* parse_register(char* str, memory* mem)
+{
+	char* t = str;
+
+	switch(*t++)
+	{
+		// extended, 32-bit register
+		case 'e':
+		switch(*t++)
+		{
+			case 'a':
+			if(*t == 'x') return &mem->registers[0].i32;
+			break;
+
+			case 'b':
+			if(*t == 'x') return &mem->registers[1].i32;
+			break;
+
+			case 'c':
+			if(*t == 'x') return &mem->registers[2].i32;
+			break;
+
+			case 'd':
+			if(*t == 'x') return &mem->registers[3].i32;
+			else if(*t == 'i') return &mem->registers[5].i32;
+			break;
+
+			case 's':
+			if(*t == 'i') return &mem->registers[4].i32;
+			break;
+		}
+		break;
+
+		case 'a':
+		if(*t == 'x') return &mem->registers[0].i16;
+		else if(*t == 'h') return &mem->registers[0].i8[1];
+		else if(*t == 'l') return &mem->registers[0].i8[0];
+		break;
+
+		case 'b':
+		if(*t == 'x') return &mem->registers[1].i16;
+		else if(*t == 'h') return &mem->registers[1].i8[1];
+		else if(*t == 'l') return &mem->registers[1].i8[0];
+		break;
+
+		case 'c':
+		if(*t == 'x') return &mem->registers[2].i16;
+		else if(*t == 'h') return &mem->registers[2].i8[1];
+		else if(*t == 'l') return &mem->registers[2].i8[0];
+		break;
+
+		case 'd':
+		if(*t == 'x') return &mem->registers[3].i16;
+		else if(*t == 'i') return &mem->registers[5].i16;
+		else if(*t == 'h') return &mem->registers[3].i8[1];
+		else if(*t == 'l') return &mem->registers[3].i8[0];
+		break;
+
+		case 's':
+		if(*t == 'i') return &mem->registers[4].i16;
+		break;
+	}
+
+	return NULL;
 }
 
 int* add_value(program* p, const int val)

@@ -29,6 +29,8 @@ typedef struct
 program* create_program(char* filename, memory* pMemory);
 void destroy_program(program* p);
 
+int* parse_register(char* str, memory* mem);
+
 int* add_value(program* p, const int val);
 int parse_value(char* str);
 
