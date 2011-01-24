@@ -7,7 +7,7 @@ http://projecteuler.net/index.php?section=forum&id=14
 
 Specify a label named "start," and it will become the entrypoint for the program.
 
-start:	mov [1], 1000000
+start:	mov [1], 1000000000
 	xor [10], [10]
 	
 	mov [0], 3

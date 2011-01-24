@@ -31,7 +31,7 @@ void destroy_vm(virtual_machine* vm)
 void run_vm(virtual_machine* vm)
 {
 	register int instr_idx = vm->pProgram->start;
-	register int equal = 0, greater = 0, remainder = 0;
+	register int FLAGS = 0, remainder = 0;
 
 	register int **arg0, **arg1;
 	arg0 = &vm->pProgram->args[0][instr_idx];
@@ -93,8 +93,7 @@ void run_vm(virtual_machine* vm)
 			**arg0 >>= **arg1;
 			break;
 		case CMP:
-			equal = (**arg0 == **arg1);
-			greater = (**arg0 > **arg1);
+			FLAGS = ((**arg0 == **arg1) | (**arg0 > **arg1) << 1);
 			break;
 jmp:		case JMP:
 			instr_idx = **arg0 - 1;
@@ -102,22 +101,22 @@ jmp:		case JMP:
 			arg1 = &vm->pProgram->args[1][instr_idx];
 			break;
 		case JE:
-			if(equal) goto jmp;;
+			if(FLAGS & 0x1) goto jmp;
 			break;
 		case JNE:
-			if(!equal) goto jmp;
+			if(!(FLAGS & 0x1)) goto jmp;
 			break;
 		case JG:
-			if(greater) goto jmp;
+			if(FLAGS & 0x2) goto jmp;
 			break;
 		case JGE:
-			if(greater || equal) goto jmp;
+			if(FLAGS & 0x3) goto jmp;
 			break;
 		case JL:
-			if(!greater && !equal) goto jmp;
+			if(!(FLAGS & 0x3)) goto jmp;
 			break;
 		case JLE:
-			if(!greater) goto jmp;
+			if(!(FLAGS & 0x2)) goto jmp;
 			break;
 		}
 
