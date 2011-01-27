@@ -251,32 +251,32 @@ int* parse_register(char* str, memory* mem)
 		break;
 
 		case 'a':
-		if(*t == 'x') return &mem->registers[0].i16;
-		else if(*t == 'h') return &mem->registers[0].i8[1];
-		else if(*t == 'l') return &mem->registers[0].i8[0];
+		if(*t == 'x') return (int*)&mem->registers[0].i16;
+		else if(*t == 'h') return (int*)&mem->registers[0].i8[1];
+		else if(*t == 'l') return (int*)&mem->registers[0].i8[0];
 		break;
 
 		case 'b':
-		if(*t == 'x') return &mem->registers[1].i16;
-		else if(*t == 'h') return &mem->registers[1].i8[1];
-		else if(*t == 'l') return &mem->registers[1].i8[0];
+		if(*t == 'x') return (int*)&mem->registers[1].i16;
+		else if(*t == 'h') return (int*)&mem->registers[1].i8[1];
+		else if(*t == 'l') return (int*)&mem->registers[1].i8[0];
 		break;
 
 		case 'c':
-		if(*t == 'x') return &mem->registers[2].i16;
-		else if(*t == 'h') return &mem->registers[2].i8[1];
-		else if(*t == 'l') return &mem->registers[2].i8[0];
+		if(*t == 'x') return (int*)&mem->registers[2].i16;
+		else if(*t == 'h') return (int*)&mem->registers[2].i8[1];
+		else if(*t == 'l') return (int*)&mem->registers[2].i8[0];
 		break;
 
 		case 'd':
-		if(*t == 'x') return &mem->registers[3].i16;
-		else if(*t == 'i') return &mem->registers[5].i16;
-		else if(*t == 'h') return &mem->registers[3].i8[1];
-		else if(*t == 'l') return &mem->registers[3].i8[0];
+		if(*t == 'x') return (int*)&mem->registers[3].i16;
+		else if(*t == 'i') return (int*)&mem->registers[5].i16;
+		else if(*t == 'h') return (int*)&mem->registers[3].i8[1];
+		else if(*t == 'l') return (int*)&mem->registers[3].i8[0];
 		break;
 
 		case 's':
-		if(*t == 'i') return &mem->registers[4].i16;
+		if(*t == 'i') return (int*)&mem->registers[4].i16;
 		break;
 	}
 
