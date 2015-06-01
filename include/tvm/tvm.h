@@ -22,7 +22,8 @@ void tvm_run(tvm_t *vm);
 
 static inline void tvm_step(tvm_t *vm, int *instr_idx)
 {
-	int *arg0 = vm->pProgram->args[*instr_idx][0], *arg1 = vm->pProgram->args[*instr_idx][1];
+	int *arg0 = vm->pProgram->args[*instr_idx][0];
+	int	*arg1 = vm->pProgram->args[*instr_idx][1];
 
 	switch(vm->pProgram->instr[*instr_idx])
 	{

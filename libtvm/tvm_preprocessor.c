@@ -6,9 +6,12 @@
 int tvm_preprocess(char *src, int *src_len, tvm_htab_t *defines)
 {
 	char* pp_directive_delimiter = NULL;
+	
+	// 处理include，就是把文件原原本本的复制过来而已
 	if((pp_directive_delimiter = strstr(src, "%include")))
 	{
-		char *strbegin = pp_directive_delimiter, *strend = strchr(strbegin, '\n');
+		char *strbegin = pp_directive_delimiter;
+		char *strend = strchr(strbegin, '\n');
 
 		if(!strend || !strbegin)  return 0;
 
@@ -50,6 +53,7 @@ int tvm_preprocess(char *src, int *src_len, tvm_htab_t *defines)
 	}
 	else if((pp_directive_delimiter = strstr(src, "%define ")))
 	{
+		// 处理define，把解析出来的key-val存入program的变量列表中
 		char *begin = pp_directive_delimiter;
 		char *end = strchr(begin, '\n');
 

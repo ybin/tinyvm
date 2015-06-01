@@ -8,22 +8,17 @@
 #include "tvm_htab.h"
 #include "tvm_memory.h"
 
+/* program在内存中用tvm_program_t来表示 */
 typedef struct tvm_program_s
 {
-	int start;
-
+	int start; // 程序的入口，相当于main函数
 	int num_instructions;
-        int *instr;
-
-        int ***args;
-
+    int *instr;
+    int ***args;
 	int **values;
 	int num_values;
-
 	tvm_htab_t *defines;
-
 	tvm_htab_t *label_htab;
-
 } tvm_program_t;
 
 /* Create and initialize an empty program object */

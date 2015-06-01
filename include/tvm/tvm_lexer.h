@@ -8,8 +8,8 @@
 
 typedef struct tvm_lexer_s
 {
-	char **source_lines;
-	char ***tokens;
+	char **source_lines; // 把源文件按行分割
+	char ***tokens; // 每一行都可能有多个token
 } tvm_lexer_t;
 
 tvm_lexer_t *lexer_create();

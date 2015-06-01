@@ -19,6 +19,7 @@ typedef union
 
 } tvm_register_t;
 
+/* vm的内存用tvm_memory_t来表示 */
 typedef struct
 {
 	/*

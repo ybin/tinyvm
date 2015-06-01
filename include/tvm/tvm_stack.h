@@ -9,7 +9,9 @@
 
 inline void stack_create(tvm_memory_t *mem, size_t size)
 {
+	// ebp, base pointer
 	mem->registers[0x7].i32_ptr = ((int32_t *)mem->mem_space) + (size / sizeof(int32_t));
+	// esp, stack pointer
 	mem->registers[0x6].i32_ptr = mem->registers[0x7].i32_ptr;
 }
 

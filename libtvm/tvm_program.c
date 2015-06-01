@@ -52,9 +52,11 @@ int program_interpret(tvm_program_t *p, char *filename, tvm_memory_t *pMemory)
 	source_length = tvm_flength(pFile);
 	char *source = calloc(source_length, sizeof(char));
 
+	// 文件内存复制进内存
 	tvm_fcopy(source, source_length, pFile);
 	fclose(pFile);
 
+	// 预处理
 	int err = 0;
 	while((err = tvm_preprocess(source, &source_length, p->defines)) > 0);
 
@@ -62,14 +64,17 @@ int program_interpret(tvm_program_t *p, char *filename, tvm_memory_t *pMemory)
 	if (err < 0)
 		return 1;
 
+	// 词法分析
 	tvm_lexer_t *lexer_ctx = lexer_create();
-	lex(lexer_ctx, source, p->defines);
+	lex(lexer_ctx, source, p->defines); // lex()的目的就是把lexer_ctx(词法树)填满
 	free(source);
 
-	if(parse_labels(p, (const char ***)lexer_ctx->tokens) != 0) return 1;
-	if(parse_instructions(p, (const char ***)lexer_ctx->tokens, pMemory) != 0) return 1;
+	// 语法分析
+	if(parse_labels(p, (const char ***)lexer_ctx->tokens) != 0) return 1; // 填充p->label_htab
+	if(parse_instructions(p, (const char ***)lexer_ctx->tokens, pMemory) != 0) return 1; // 填充instruct, args, values等
 
 	lexer_destroy(lexer_ctx);
+	// 完成之后，程序在内存中的数据结构就创建起来了
 	return 0;
 }
 
